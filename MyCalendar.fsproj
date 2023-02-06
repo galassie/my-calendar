@@ -11,6 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Argu" Version="6.1.1" />
-    <PackageReference Include="FsSpectre" Version="0.3.2" />
+    <PackageReference Include="FsSpectre" Version="0.4.0" />
   </ItemGroup>
 </Project>
