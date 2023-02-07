@@ -1,1 +1,1 @@
-# my-calendar
+# MyCalendar
