@@ -7,8 +7,16 @@ module Program =
 
     [<EntryPoint>]
     let main args =
-        let errorHandler = ProcessExiter(colorizer = function ErrorCode.HelpText -> None | _ -> Some ConsoleColor.Red)
-        let parser = ArgumentParser.Create<Arguments>(programName = "mycalendar", errorHandler = errorHandler)
+        let errorHandler =
+            ProcessExiter(
+                colorizer =
+                    function
+                    | ErrorCode.HelpText -> None
+                    | _ -> Some ConsoleColor.Red
+            )
+
+        let parser =
+            ArgumentParser.Create<Arguments>(programName = "mycalendar", errorHandler = errorHandler)
 
         let results = parser.ParseCommandLine args
 

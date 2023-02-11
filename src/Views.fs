@@ -11,14 +11,13 @@ module Views =
         grid {
             number_of_columns 1
             row [| calendar { events [| calendarEvent { date_time now } |] } |]
+
             row
                 [| text {
                        text $"{now.Day} {now.DayOfWeek}"
                        centered
                    } |]
         }
-
-
 
     let todo (todos: ToDo array) (now: DateTime) =
         let toShow: IRenderable array =

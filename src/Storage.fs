@@ -12,10 +12,9 @@ module Storage =
         let path = Path.Combine(Path.GetTempPath(), $"mycalendar-{year}.json")
 
         let data =
-                if (File.Exists(path)) then
-                    File.ReadAllText(path)
-                    |> Json.deserialize<MyCalendarData>
-                else
-                    MyCalendarData.Default
+            if (File.Exists(path)) then
+                File.ReadAllText(path) |> Json.deserialize<MyCalendarData>
+            else
+                MyCalendarData.Default
 
         data
