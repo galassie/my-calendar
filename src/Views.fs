@@ -19,14 +19,10 @@ module Views =
                    } |]
         }
 
-    let todo (todos: ToDo array) (now: DateTime) =
+    let todo (now: DateTime) (todos: ToDo array) =
         let toShow: IRenderable array =
             todos
-            |> Array.filter (fun todo -> not todo.SoftDeleted)
-            |> Array.filter (fun todo ->
-                todo.MarkedDoneAt
-                |> Option.map (fun dt -> (now - dt).Days < 5)
-                |> Option.defaultValue true)
+            |> ToDo.extractForView now
             |> Array.map (fun todo ->
                 if Option.isSome todo.MarkedDoneAt then
                     $"[strikethrough]{todo.Name}[/]"
@@ -42,7 +38,7 @@ module Views =
             content_renderable (rows { items_renderable toShow })
         }
 
-    let nextEvents (recurringEvents: RecurringEvent array) (events: Event array) (now: DateTime) =
+    let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
         panel {
             expand
             width 32

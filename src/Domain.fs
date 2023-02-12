@@ -87,3 +87,22 @@ type MyCalendarData =
         { RecurringEvents = Array.empty<RecurringEvent>
           ToDos = Array.empty<ToDo>
           Events = Array.empty<Event> }
+
+[<RequireQualifiedAccess>]
+module ToDo =
+
+  let private markedDoneMoreThanDaysAgo (now: DateTime) (days: int) (todo: ToDo) =
+    match todo.MarkedDoneAt with
+    | None -> false
+    | Some dateTime -> 
+      dateTime.Day + days <= now.Day 
+
+  let extractForView (now: DateTime) (todos: ToDo array) =
+    let (markedDone, notMarkedDone) =
+      todos
+      |> Array.filter (fun td -> not td.SoftDeleted)
+      |> Array.filter (markedDoneMoreThanDaysAgo now 5 >> not)
+      |> Array.sortBy (fun td -> td.CreatedAt)
+      |> Array.partition (fun td -> Option.isSome td.MarkedDoneAt)
+    
+    Array.append notMarkedDone markedDone 

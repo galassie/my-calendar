@@ -26,8 +26,8 @@ type Handlers =
 
                 row
                     [| Views.calendar now
-                       Views.todo data.ToDos now
-                       Views.nextEvents data.RecurringEvents data.Events now |]
+                       Views.todo now data.ToDos
+                       Views.nextEvents now data.RecurringEvents data.Events |]
 
                 empty_row
             }
