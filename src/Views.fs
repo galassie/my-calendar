@@ -25,10 +25,9 @@ module Views =
             |> ToDo.extractForView now
             |> Array.map (fun todo ->
                 if Option.isSome todo.MarkedDoneAt then
-                    $"[strikethrough]{todo.Name}[/]"
+                    text { text $"[strikethrough]{todo.Name}[/]" }
                 else
-                    todo.Name)
-            |> Array.map (fun txt -> text { text txt })
+                    text { text todo.Name })
 
         panel {
             expand
