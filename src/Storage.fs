@@ -18,11 +18,10 @@ module Storage =
                 MyCalendarData.Default
 
         data
-    
+
     let store (date: DateTime) (data: MyCalendarData) =
         let year = date.Year
         let path = Path.Combine(Path.GetTempPath(), $"mycalendar-{year}.json")
 
         let str = Json.serialize data
         File.WriteAllText(path, str)
-

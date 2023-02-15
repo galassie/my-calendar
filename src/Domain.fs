@@ -56,7 +56,8 @@ type RecurringType =
     | EveryYear of month: Month * day: Day
 
 type RecurringEvent =
-    { Name: string
+    { Id: Guid
+      Name: string
       Description: string
       IsImportant: bool
       RecurringType: RecurringType
@@ -64,14 +65,16 @@ type RecurringEvent =
       SoftDeleted: bool }
 
 type ToDo =
-    { Name: string
+    { Id: Guid
+      Name: string
       Description: string
       CreatedAt: DateTime
       MarkedDoneAt: DateTime option
       SoftDeleted: bool }
 
 type Event =
-    { Name: string
+    { Id: Guid
+      Name: string
       Description: string
       IsImportant: bool
       When: DateOnly
@@ -91,18 +94,37 @@ type MyCalendarData =
 [<RequireQualifiedAccess>]
 module ToDo =
 
-  let private markedDoneMoreThanDaysAgo (now: DateTime) (days: int) (todo: ToDo) =
-    match todo.MarkedDoneAt with
-    | None -> false
-    | Some dateTime -> 
-      dateTime.Day + days <= now.Day 
+    let toString (todo: ToDo) = $"{todo.Name}: {todo.Description}"
 
-  let extractForView (now: DateTime) (todos: ToDo array) =
-    let (markedDone, notMarkedDone) =
-      todos
-      |> Array.filter (fun td -> not td.SoftDeleted)
-      |> Array.filter (markedDoneMoreThanDaysAgo now 5 >> not)
-      |> Array.sortBy (fun td -> td.CreatedAt)
-      |> Array.partition (fun td -> Option.isSome td.MarkedDoneAt)
-    
-    Array.append notMarkedDone markedDone 
+    let private equalId (first: ToDo) (second: ToDo) = first.Id.Equals(second.Id)
+        
+    let update (todo: ToDo) (todos: ToDo array) =
+        Array.tryFindIndex (equalId todo) todos
+        |> function
+            | None -> todos
+            | Some index -> Array.updateAt index todo todos
+            
+    let active (todos: ToDo array) =
+        todos
+        |> Array.filter (fun td -> not td.SoftDeleted && Option.isNone td.MarkedDoneAt)
+        |> Array.sortByDescending (fun td -> td.CreatedAt)
+            
+    let markedDone (todos: ToDo array) =
+        todos
+        |> Array.filter (fun td -> Option.isSome td.MarkedDoneAt)
+        |> Array.sortByDescending (fun td -> td.CreatedAt)
+
+    let private markedDoneMoreThanDaysAgo (now: DateTime) (days: int) (todo: ToDo) =
+        match todo.MarkedDoneAt with
+        | None -> false
+        | Some dateTime -> dateTime.Day + days <= now.Day
+
+    let extractForView (now: DateTime) (todos: ToDo array) =
+        let (markedDone, notMarkedDone) =
+            todos
+            |> Array.filter (fun td -> not td.SoftDeleted)
+            |> Array.filter (markedDoneMoreThanDaysAgo now 5 >> not)
+            |> Array.sortByDescending (fun td -> td.CreatedAt)
+            |> Array.partition (fun td -> Option.isSome td.MarkedDoneAt)
+
+        Array.append notMarkedDone markedDone

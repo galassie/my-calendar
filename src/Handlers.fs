@@ -9,52 +9,70 @@ module Handlers =
 
     let handleToDoSubArgs (now: DateTime) (data: MyCalendarData) (args: ToDoSubArguments) =
         match args with
-        | Add -> 
+        | Add ->
             let name =
-                textPrompt<string> {
-                    text "What's the new of the new ToDo?"
-                } |> AnsiConsole.Prompt
-            
+                textPrompt<string> { text "What's the new of the new ToDo?" }
+                |> AnsiConsole.Prompt
+
             let description =
-                textPrompt<string> {
-                    text "Give it a brief description:"
-                } |> AnsiConsole.Prompt
-            
-            let todo = 
-                { Name = name
-                  Description = description 
+                textPrompt<string> { text "Give it a brief description:" } |> AnsiConsole.Prompt
+
+            let todo =
+                { Id = Guid.NewGuid()
+                  Name = name
+                  Description = description
                   CreatedAt = now
-                  MarkedDoneAt =  None
+                  MarkedDoneAt = None
                   SoftDeleted = false }
-            
-            let newData = { data with ToDos = Array.append [| todo |] data.ToDos }
+
+            let newToDos = Array.append [| todo |] data.ToDos
+            let newData = { data with ToDos = newToDos }
 
             Storage.store now newData
-            
 
-        | Done -> AnsiConsole.WriteLine "test"
+            Views.mainView now newData |> AnsiConsole.Write
+
+        | Done ->
+            let todo =
+                selectionPrompt<ToDo> {
+                    title "Select a ToDo you want to mark as done:"
+                    page_size 10
+                    choices (ToDo.active data.ToDos)
+                    converter ToDo.toString
+                }
+                |> AnsiConsole.Prompt
+
+            let markedDone = { todo with MarkedDoneAt = Some now }
+            let newToDos = ToDo.update markedDone data.ToDos
+            let newData = { data with ToDos = newToDos }
+
+            Storage.store now newData
+
+            Views.mainView now newData |> AnsiConsole.Write
+
+        | Undone ->
+            let todo =
+                selectionPrompt<ToDo> {
+                    title "Select a ToDo you want to undo:"
+                    page_size 10
+                    choices (ToDo.markedDone data.ToDos)
+                    converter ToDo.toString
+                }
+                |> AnsiConsole.Prompt
+
+            let unmarkedDone = { todo with MarkedDoneAt = None }
+            let newToDos = ToDo.update unmarkedDone data.ToDos
+            let newData = { data with ToDos = newToDos }
+
+            Storage.store now newData
+
+            Views.mainView now newData |> AnsiConsole.Write
 
     let handle (args: Arguments) =
         let now = DateTime.Now
         let data = Storage.retrieve now
 
         match args with
-        | Show ->
-            grid {
-                number_of_columns 3
-                empty_row
+        | Show -> Views.mainView now data |> AnsiConsole.Write
 
-                row
-                    [| Views.calendar now
-                       Views.todo now data.ToDos
-                       Views.nextEvents now data.RecurringEvents data.Events |]
-
-                empty_row
-            }
-            |> AnsiConsole.Write
-        
-        | ToDo subArgs ->
-            subArgs.GetAllResults() |> List.map (handleToDoSubArgs now data) |> ignore
-
-
-            
+        | ToDo subArgs -> subArgs.GetAllResults() |> List.map (handleToDoSubArgs now data) |> ignore

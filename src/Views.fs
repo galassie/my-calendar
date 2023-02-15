@@ -19,15 +19,16 @@ module Views =
                    } |]
         }
 
-    let todo (now: DateTime) (todos: ToDo array) =
+    let todo (todos: ToDo array) =
         let toShow: IRenderable array =
             todos
-            |> ToDo.extractForView now
             |> Array.map (fun todo ->
+                let str = ToDo.toString todo
+
                 if Option.isSome todo.MarkedDoneAt then
-                    text { text $"[strikethrough]{todo.Name}[/]" }
+                    markup { text $"· [strikethrough]{str}[/]" }
                 else
-                    text { text todo.Name })
+                    markup { text $"· {str}" })
 
         panel {
             expand
@@ -37,11 +38,23 @@ module Views =
             content_renderable (rows { items_renderable toShow })
         }
 
-    let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
+    let eventsOfTheMonth (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
         panel {
             expand
             width 32
             height 32
             header_text "Events of the month"
             content_renderable (rows { items_renderable [||] })
+        }
+
+    let mainView (now: DateTime) (data: MyCalendarData) =
+        let todos = ToDo.extractForView now data.ToDos
+
+        grid {
+            number_of_columns 3
+            empty_row
+
+            row [| calendar now; todo todos; eventsOfTheMonth now data.RecurringEvents data.Events |]
+
+            empty_row
         }
