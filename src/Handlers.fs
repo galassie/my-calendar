@@ -4,17 +4,37 @@ open System
 open Spectre.Console
 open FsSpectre
 
-type Handlers =
+[<RequireQualifiedAccess>]
+module Handlers =
 
-    static member private NextEventsPanel() =
-        panel {
-            expand
-            width 32
-            header_text "Next events"
-            content_renderable (rows { items_renderable [| text { text "hello" }; text { text "hello" } |] })
-        }
+    let handleToDoSubArgs (now: DateTime) (data: MyCalendarData) (args: ToDoSubArguments) =
+        match args with
+        | Add -> 
+            let name =
+                textPrompt<string> {
+                    text "What's the new of the new ToDo?"
+                } |> AnsiConsole.Prompt
+            
+            let description =
+                textPrompt<string> {
+                    text "Give it a brief description:"
+                } |> AnsiConsole.Prompt
+            
+            let todo = 
+                { Name = name
+                  Description = description 
+                  CreatedAt = now
+                  MarkedDoneAt =  None
+                  SoftDeleted = false }
+            
+            let newData = { data with ToDos = Array.append [| todo |] data.ToDos }
 
-    static member Handle(args: Arguments) =
+            Storage.store now newData
+            
+
+        | Done -> AnsiConsole.WriteLine "test"
+
+    let handle (args: Arguments) =
         let now = DateTime.Now
         let data = Storage.retrieve now
 
@@ -32,3 +52,9 @@ type Handlers =
                 empty_row
             }
             |> AnsiConsole.Write
+        
+        | ToDo subArgs ->
+            subArgs.GetAllResults() |> List.map (handleToDoSubArgs now data) |> ignore
+
+
+            

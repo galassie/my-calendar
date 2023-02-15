@@ -20,6 +20,6 @@ module Program =
 
         let results = parser.ParseCommandLine args
 
-        results.GetAllResults() |> List.map Handlers.Handle |> ignore
+        results.GetAllResults() |> List.map Handlers.handle |> ignore
 
         0
