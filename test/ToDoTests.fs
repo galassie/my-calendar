@@ -119,6 +119,20 @@ let ``markedDone should return proper ToDos`` () =
     Assert.AreEqual("done very old 1", result[2].Name)
 
 [<Test>]
+let ``deletable should return proper ToDos`` () =
+    let result = ToDo.deletable todos
+
+    // Only the not SoftDelete should be returned
+    Assert.AreEqual(5, result.Length)
+
+    // Ordered by DateTime with the most recently created on top
+    Assert.AreEqual("test 2", result[0].Name)
+    Assert.AreEqual("test 1", result[1].Name)
+    Assert.AreEqual("done 2", result[2].Name)
+    Assert.AreEqual("done 1", result[3].Name)
+    Assert.AreEqual("done very old 1", result[4].Name)
+
+[<Test>]
 let ``extractForView should return proper ToDos`` () =
     let result = ToDo.extractForView now todos
 

@@ -6,6 +6,7 @@ type ToDoSubArguments =
     | [<CliPrefix(CliPrefix.None)>] Add
     | [<CliPrefix(CliPrefix.None)>] Done
     | [<CliPrefix(CliPrefix.None)>] Undone
+    | [<CliPrefix(CliPrefix.None)>] Delete
 
     interface IArgParserTemplate with
         member s.Usage =
@@ -13,6 +14,7 @@ type ToDoSubArguments =
             | Add -> "add a ToDo to your list"
             | Done -> "mark done a ToDo"
             | Undone -> "undone a ToDo marked done"
+            | Delete -> "remove a ToDo from your list"
 
 
 type Arguments =

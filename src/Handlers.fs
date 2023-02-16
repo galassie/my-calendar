@@ -68,6 +68,24 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
+        | [ Delete ] ->
+            let todo =
+                selectionPrompt<ToDo> {
+                    title "Select a ToDo you want to delete:"
+                    page_size 10
+                    choices (ToDo.deletable data.ToDos)
+                    converter ToDo.toString
+                }
+                |> AnsiConsole.Prompt
+
+            let deleted = { todo with SoftDeleted = true }
+            let newToDos = ToDo.update deleted data.ToDos
+            let newData = { data with ToDos = newToDos }
+
+            Storage.store now newData
+
+            Views.mainView now newData |> AnsiConsole.Write
+
         | _ -> markup { text "[red]Too many sub arguments provided![/]" } |> AnsiConsole.Write
 
     let handle (args: Arguments list) =

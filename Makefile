@@ -14,6 +14,10 @@ todo-done:
 todo-undone:
 	dotnet run --project src/MyCalendar.fsproj todo undone
 
+# Run the todo delete command
+todo-delete:
+	dotnet run --project src/MyCalendar.fsproj todo delete
+
 # Format all the project
 format:
 	dotnet tool run fantomas . -r

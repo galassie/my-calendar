@@ -113,6 +113,11 @@ module ToDo =
         todos
         |> Array.filter (fun td -> Option.isSome td.MarkedDoneAt)
         |> Array.sortByDescending (fun td -> td.CreatedAt)
+            
+    let deletable (todos: ToDo array) =
+        todos
+        |> Array.filter (fun td -> not td.SoftDeleted)
+        |> Array.sortByDescending (fun td -> td.CreatedAt)
 
     let private markedDoneMoreThanDaysAgo (now: DateTime) (days: int) (todo: ToDo) =
         match todo.MarkedDoneAt with
