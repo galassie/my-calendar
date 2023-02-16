@@ -19,7 +19,8 @@ module Program =
             ArgumentParser.Create<Arguments>(programName = "mycalendar", errorHandler = errorHandler)
 
         let results = parser.ParseCommandLine args
-
-        results.GetAllResults() |> List.map Handlers.handle |> ignore
+        let args = results.GetAllResults()
+        
+        Handlers.handle args
 
         0

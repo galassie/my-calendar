@@ -7,9 +7,9 @@ open FsSpectre
 [<RequireQualifiedAccess>]
 module Handlers =
 
-    let handleToDoSubArgs (now: DateTime) (data: MyCalendarData) (args: ToDoSubArguments) =
-        match args with
-        | Add ->
+    let handleToDoSubArgs (now: DateTime) (data: MyCalendarData) (subArgs: ToDoSubArguments list) =
+        match subArgs with
+        | [ Add ] ->
             let name =
                 textPrompt<string> { text "What's the new of the new ToDo?" }
                 |> AnsiConsole.Prompt
@@ -32,7 +32,7 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | Done ->
+        | [ Done ] ->
             let todo =
                 selectionPrompt<ToDo> {
                     title "Select a ToDo you want to mark as done:"
@@ -50,7 +50,7 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | Undone ->
+        | [ Undone ] ->
             let todo =
                 selectionPrompt<ToDo> {
                     title "Select a ToDo you want to undo:"
@@ -68,11 +68,17 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-    let handle (args: Arguments) =
+        | _ -> markup { text "[red]Too many sub arguments provided![/]" } |> AnsiConsole.Write
+
+    let handle (args: Arguments list) =
         let now = DateTime.Now
         let data = Storage.retrieve now
 
         match args with
-        | Show -> Views.mainView now data |> AnsiConsole.Write
+        | [ Show ] -> Views.mainView now data |> AnsiConsole.Write
 
-        | ToDo subArgs -> subArgs.GetAllResults() |> List.map (handleToDoSubArgs now data) |> ignore
+        | [ ToDo subArgs ] ->
+            let subArgs = subArgs.GetAllResults()
+            handleToDoSubArgs now data subArgs
+
+        | _ -> markup { text "[red]Too many arguments provided![/]" } |> AnsiConsole.Write
