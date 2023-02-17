@@ -6,6 +6,10 @@ show:
 todo-add:
 	dotnet run --project src/MyCalendar.fsproj todo add
 
+# Run the todo edit command
+todo-edit:
+	dotnet run --project src/MyCalendar.fsproj todo edit
+
 # Run the todo done command
 todo-done:
 	dotnet run --project src/MyCalendar.fsproj todo done

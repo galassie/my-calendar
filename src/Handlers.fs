@@ -32,6 +32,42 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
+        | [ Edit ] ->
+            let todo =
+                selectionPrompt<ToDo> {
+                    title "Select a ToDo you want to edit:"
+                    page_size 10
+                    choices (ToDo.active data.ToDos)
+                    converter ToDo.toString
+                }
+                |> AnsiConsole.Prompt
+
+            let name =
+                textPrompt<string> {
+                    text "What's the new name of the ToDo?"
+                    default_value todo.Name
+                }
+                |> AnsiConsole.Prompt
+
+            let description =
+                textPrompt<string> {
+                    text "What's the new description of the ToDo?"
+                    default_value todo.Description
+                }
+                |> AnsiConsole.Prompt
+
+            let updatedTodo =
+                { todo with
+                    Name = name
+                    Description = description }
+
+            let newToDos = ToDo.update updatedTodo data.ToDos
+            let newData = { data with ToDos = newToDos }
+
+            Storage.store now newData
+
+            Views.mainView now newData |> AnsiConsole.Write
+
         | [ Done ] ->
             let todo =
                 selectionPrompt<ToDo> {
