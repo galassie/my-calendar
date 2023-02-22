@@ -9,9 +9,9 @@ module Handlers =
 
     let handleToDoSubArgs (now: DateTime) (data: MyCalendarData) (subArgs: ToDoSubArguments list) =
         match subArgs with
-        | [ Add ] ->
+        | [ ToDoSubArguments.Add ] ->
             let name =
-                textPrompt<string> { text "What's the new of the new ToDo?" }
+                textPrompt<string> { text "What's the name of the new ToDo?" }
                 |> AnsiConsole.Prompt
 
             let description =
@@ -32,7 +32,7 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | [ Edit ] ->
+        | [ ToDoSubArguments.Edit ] ->
             let todo =
                 selectionPrompt<ToDo> {
                     title "Select a ToDo you want to edit:"
@@ -68,7 +68,7 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | [ Done ] ->
+        | [ ToDoSubArguments.Done ] ->
             let todo =
                 selectionPrompt<ToDo> {
                     title "Select a ToDo you want to mark as done:"
@@ -86,7 +86,7 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | [ Undone ] ->
+        | [ ToDoSubArguments.Undone ] ->
             let todo =
                 selectionPrompt<ToDo> {
                     title "Select a ToDo you want to undo:"
@@ -104,7 +104,7 @@ module Handlers =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | [ Delete ] ->
+        | [ ToDoSubArguments.Delete ] ->
             let todo =
                 selectionPrompt<ToDo> {
                     title "Select a ToDo you want to delete:"
@@ -124,6 +124,53 @@ module Handlers =
 
         | _ -> markup { text "[red]Too many sub arguments provided![/]" } |> AnsiConsole.Write
 
+    let handleEventSubArgs (now: DateTime) (data: MyCalendarData) (subArgs: EventSubArguments list) =
+        match subArgs with
+        | [ EventSubArguments.Add ] ->
+            let name =
+                textPrompt<string> { text "What's the name of the new Event?" }
+                |> AnsiConsole.Prompt
+
+            let description =
+                textPrompt<string> { text "Give it a brief description:" } |> AnsiConsole.Prompt
+
+            let onlyDate =
+                textPrompt<string> { 
+                    text "When? [grey](yyyy-mm-dd)[/]"
+                    validator (fun input -> 
+                        match OnlyDate.TryParse(input) with
+                        | Some _ -> ValidationResult.Success ()
+                        | None -> ValidationResult.Error "The date inserted is not valid!" ) } 
+                |> AnsiConsole.Prompt
+                |> OnlyDate.TryParse
+                |> Option.defaultValue { Year = now.Year; Month = now.Month; Day = now.Day }
+
+            let isImportant =
+                textPrompt<bool> { 
+                    text "Is it important? [grey](N/y)[/]" 
+                    choices [| true; false |]
+                    converter (fun b -> if b then "y" else "n")
+                    default_value false
+                } |> AnsiConsole.Prompt
+
+            let event =
+                { Id = Guid.NewGuid()
+                  Name = name
+                  Description = description
+                  IsImportant = isImportant
+                  When = onlyDate
+                  CreatedAt = now
+                  SoftDeleted = false }
+
+            let newEvents = Array.append [| event |] data.Events
+            let newData = { data with Events = newEvents }
+
+            Storage.store now newData
+
+            Views.mainView now newData |> AnsiConsole.Write
+
+        | _ -> markup { text "[red]Too many sub arguments provided![/]" } |> AnsiConsole.Write
+
     let handle (args: Arguments list) =
         let now = DateTime.Now
         let data = Storage.retrieve now
@@ -134,5 +181,9 @@ module Handlers =
         | [ ToDo subArgs ] ->
             let subArgs = subArgs.GetAllResults()
             handleToDoSubArgs now data subArgs
+
+        | [ Event subArgs ] ->
+            let subArgs = subArgs.GetAllResults()
+            handleEventSubArgs now data subArgs
 
         | _ -> markup { text "[red]Too many arguments provided![/]" } |> AnsiConsole.Write

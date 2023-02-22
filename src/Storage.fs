@@ -20,8 +20,12 @@ module Storage =
         data
 
     let store (date: DateTime) (data: MyCalendarData) =
-        let year = date.Year
-        let path = Path.Combine(Path.GetTempPath(), $"mycalendar-{year}.json")
+        try
+            let year = date.Year
+            let path = Path.Combine(Path.GetTempPath(), $"mycalendar-{year}.json")
 
-        let str = Json.serialize data
-        File.WriteAllText(path, str)
+            let str = Json.serialize data
+            File.WriteAllText(path, str)
+        with ex ->
+            printfn "%A" (ex.ToString())
+            

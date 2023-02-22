@@ -55,6 +55,19 @@ type RecurringType =
     | EveryMonth of day: Day
     | EveryYear of month: Month * day: Day
 
+// Creating this struct since DateOnly native type is not handled by FSharp.Json
+type OnlyDate =
+    { Year: int
+      Month: int
+      Day: int }
+    
+    static member TryParse(input: string) =
+        let success, result = DateOnly.TryParse(input)
+        if success then
+            Some { Year = result.Year; Month = result.Month; Day = result.Day }
+        else
+            None
+
 type RecurringEvent =
     { Id: Guid
       Name: string
@@ -77,7 +90,7 @@ type Event =
       Name: string
       Description: string
       IsImportant: bool
-      When: DateOnly
+      When: OnlyDate
       CreatedAt: DateTime
       SoftDeleted: bool }
 

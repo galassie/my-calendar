@@ -22,6 +22,10 @@ todo-undone:
 todo-delete:
 	dotnet run --project src/MyCalendar.fsproj todo delete
 
+# Run the event add command
+event-add:
+	dotnet run --project src/MyCalendar.fsproj event add
+
 # Format all the project
 format:
 	dotnet tool run fantomas . -r

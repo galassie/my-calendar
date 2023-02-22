@@ -2,6 +2,7 @@ namespace MyCalendar
 
 open System
 open FsSpectre
+open Spectre.Console
 open Spectre.Console.Rendering
 
 [<RequireQualifiedAccess>]
@@ -10,7 +11,12 @@ module Views =
     let calendar (now: DateTime) =
         grid {
             number_of_columns 1
-            row [| calendar { events [| calendarEvent { date_time now } |] } |]
+
+            row
+                [| calendar {
+                       events [| calendarEvent { date_time now } |]
+                       highlight_style (style { foreground Color.Green })
+                   } |]
 
             row
                 [| text {
@@ -54,7 +60,10 @@ module Views =
             number_of_columns 3
             empty_row
 
-            row [| calendar now; todo todos; eventsOfTheMonth now data.RecurringEvents data.Events |]
+            row
+                [| calendar now
+                   todo todos
+                   eventsOfTheMonth now data.RecurringEvents data.Events |]
 
             empty_row
         }
