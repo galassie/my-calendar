@@ -23,7 +23,7 @@ module EventHandler =
                     validator (fun input -> 
                         match OnlyDate.TryParse(input) with
                         | Some _ -> ValidationResult.Success ()
-                        | None -> ValidationResult.Error "The date inserted is not valid!" ) } 
+                        | None -> ValidationResult.Error "[red]The date inserted is not valid![/]" ) } 
                 |> AnsiConsole.Prompt
                 |> OnlyDate.TryParse
                 |> Option.defaultValue { Year = now.Year; Month = now.Month; Day = now.Day }
