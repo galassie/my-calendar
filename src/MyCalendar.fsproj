@@ -9,7 +9,9 @@
     <Compile Include="Storage.fs" />
     <Compile Include="Views.fs" />
     <Compile Include="Arguments.fs" />
-    <Compile Include="Handlers.fs" />
+    <Compile Include="Handlers/ToDoHandler.fs" />
+    <Compile Include="Handlers/EventHandler.fs" />
+    <Compile Include="Handlers/MainHandler.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

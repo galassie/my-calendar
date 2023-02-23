@@ -2,7 +2,7 @@ namespace MyCalendar
 
 open Argu
 
-type ToDoSubArguments =
+type ToDoArguments =
     | [<CliPrefix(CliPrefix.None)>] Add
     | [<CliPrefix(CliPrefix.None)>] Edit
     | [<CliPrefix(CliPrefix.None)>] Done
@@ -18,7 +18,7 @@ type ToDoSubArguments =
             | Undone -> "undone a ToDo marked done"
             | Delete -> "remove a ToDo from your list"
 
-and EventSubArguments =
+and EventArguments =
     | [<CliPrefix(CliPrefix.None)>] Add
     | [<CliPrefix(CliPrefix.None)>] Edit
     | [<CliPrefix(CliPrefix.None)>] Delete
@@ -33,8 +33,8 @@ and EventSubArguments =
 
 and Arguments =
     | [<CliPrefix(CliPrefix.None)>] Show
-    | [<CliPrefix(CliPrefix.None)>] ToDo of ParseResults<ToDoSubArguments>
-    | [<CliPrefix(CliPrefix.None)>] Event of ParseResults<EventSubArguments>
+    | [<CliPrefix(CliPrefix.None)>] ToDo of ParseResults<ToDoArguments>
+    | [<CliPrefix(CliPrefix.None)>] Event of ParseResults<EventArguments>
 
     interface IArgParserTemplate with
         member s.Usage =

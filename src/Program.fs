@@ -21,6 +21,6 @@ module Program =
         let results = parser.ParseCommandLine args
         let args = results.GetAllResults()
         
-        Handlers.handle args
+        MainHandler.handle args
 
         0
