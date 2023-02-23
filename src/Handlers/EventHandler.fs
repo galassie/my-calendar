@@ -34,6 +34,7 @@ module EventHandler =
                     choices [| true; false |]
                     converter (fun b -> if b then "y" else "n")
                     default_value false
+                    hide_default_value
                 } |> AnsiConsole.Prompt
 
             let event =

@@ -5,8 +5,9 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OnlyDate.fs" />
+    <Compile Include="OnlyDateTests.fs" />
     <Compile Include="ToDoTests.fs" />
+    <Compile Include="EventTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

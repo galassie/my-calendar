@@ -146,3 +146,17 @@ module ToDo =
             |> Array.partition (fun td -> Option.isSome td.MarkedDoneAt)
 
         Array.append notMarkedDone markedDone
+
+[<RequireQualifiedAccess>]
+module Event =
+
+    let toString (event: Event) = $"{event.Name}: {event.Description} ({event.When.Year}-{event.When.Month}-{event.When.Day})"
+
+    let nextEvents (now: DateTime) (events: Event array) =
+        let nowAsOnlyDate = { Year = now.Year; Month = now.Month; Day = now.Day }
+
+        events
+        |> Array.filter (fun ev -> not ev.SoftDeleted)
+        |> Array.filter (fun ev -> (compare nowAsOnlyDate ev.When) <= 0)
+        |> Array.sortBy (fun ev -> ev.When)
+        |> Array.truncate 5

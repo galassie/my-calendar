@@ -1,0 +1,94 @@
+module EventTests
+
+open System
+open MyCalendar
+open NUnit.Framework
+
+let now = DateTime.Now
+
+let events: Event array =
+    [| { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
+         Name = "test 2"
+         Description = "it's a test 2"
+         CreatedAt = now
+         IsImportant = false
+         When =
+           { Year = now.Year
+             Month = now.Month
+             Day = now.Day }
+         SoftDeleted = false }
+       { Id = Guid.Parse("6bd86c63-350b-4210-a767-43a08fc9a6b0")
+         Name = "very old 1"
+         Description = "very old 1"
+         CreatedAt = now.AddYears(-1)
+         IsImportant = false
+         When =
+           { Year = now.Year - 1
+             Month = now.Month
+             Day = now.Day }
+         SoftDeleted = false }
+       { Id = Guid.Parse("c43830d5-35b0-45a8-812a-28d9dc3f7b7d")
+         Name = "old 1"
+         Description = "old 1"
+         CreatedAt = now.AddMonths(-3)
+         IsImportant = false
+         When =
+           { Year = now.Year
+             Month = now.Month - 3
+             Day = now.Day }
+         SoftDeleted = false }
+       { Id = Guid.Parse("137a7ba3-9331-4501-a15b-73bb0c9ee38d")
+         Name = "deleted 1"
+         Description = "deleted 1"
+         CreatedAt = now
+         IsImportant = false
+         When =
+           { Year = now.Year
+             Month = now.Month
+             Day = now.Day }
+         SoftDeleted = true }
+       { Id = Guid.Parse("46918e99-2704-411a-b2c0-eee80bf060ab")
+         Name = "not so old 2"
+         Description = "not so old 2"
+         CreatedAt = now.AddDays(-2)
+         IsImportant = false
+         When =
+           { Year = now.Year
+             Month = now.Month
+             Day = now.Day - 2 }
+         SoftDeleted = false }
+       { Id = Guid.Parse("d86ebde1-c3ab-4d34-a70d-7effd12a2988")
+         Name = "important next year 1"
+         Description = "important next year 1"
+         CreatedAt = now.AddDays(-1)
+         IsImportant = true
+         When =
+           { Year = now.Year + 1
+             Month = now.Month
+             Day = now.Day }
+         SoftDeleted = false } |]
+
+
+[<Test>]
+let ``toString should return proper stringify version of the Event`` () =
+    let result = Array.map Event.toString events
+
+    Assert.AreEqual(6, result.Length)
+
+    Assert.AreEqual($"test 2: it's a test 2 ({now.Year}-{now.Month}-{now.Day})", result[0])
+    Assert.AreEqual($"very old 1: very old 1 ({now.Year - 1}-{now.Month}-{now.Day})", result[1])
+    Assert.AreEqual($"old 1: old 1 ({now.Year}-{now.Month - 3}-{now.Day})", result[2])
+    Assert.AreEqual($"deleted 1: deleted 1 ({now.Year}-{now.Month}-{now.Day})", result[3])
+    Assert.AreEqual($"not so old 2: not so old 2 ({now.Year}-{now.Month}-{now.Day - 2})", result[4])
+    Assert.AreEqual($"important next year 1: important next year 1 ({now.Year + 1}-{now.Month}-{now.Day})", result[5])
+
+[<Test>]
+let ``nextEvents should return proper Events`` () =
+    let result = Event.nextEvents now events
+
+    // The Events previous today and SoftDeleted should be removed
+    Assert.AreEqual(2, result.Length)
+
+    // Ordered by When with the upcoming one on top
+    Assert.AreEqual("test 2", result[0].Name)
+    Assert.AreEqual("important next year 1", result[1].Name)
