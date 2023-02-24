@@ -152,6 +152,14 @@ module Event =
 
     let toString (event: Event) = $"{event.Name}: {event.Description} ({event.When.Year}-{event.When.Month}-{event.When.Day})"
 
+    let private equalId (first: Event) (second: Event) = first.Id.Equals(second.Id)
+        
+    let update (event: Event) (events: Event array) =
+        Array.tryFindIndex (equalId event) events
+        |> function
+            | None -> events
+            | Some index -> Array.updateAt index event events
+
     let nextEvents (now: DateTime) (events: Event array) =
         let nowAsOnlyDate = { Year = now.Year; Month = now.Month; Day = now.Day }
 

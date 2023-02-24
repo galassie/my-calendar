@@ -83,6 +83,51 @@ let ``toString should return proper stringify version of the Event`` () =
     Assert.AreEqual($"important next year 1: important next year 1 ({now.Year + 1}-{now.Month}-{now.Day})", result[5])
 
 [<Test>]
+let ``update should return updated version of the Event array if Event is found, based on Id, or return the same version`` () =
+    let updatableEvent = 
+      { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
+        Name = "UPDATE"
+        Description = "it's a test 2"
+        CreatedAt = now
+        IsImportant = false
+        When =
+          { Year = now.Year
+            Month = now.Month
+            Day = now.Day }
+        SoftDeleted = false }
+    let notUpdatableEvent = 
+      { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
+        Name = "TRY TO UPDATE"
+        Description = "it's a test 2"
+        CreatedAt = now
+        IsImportant = false
+        When =
+          { Year = now.Year
+            Month = now.Month
+            Day = now.Day }
+        SoftDeleted = false }
+    
+    let updatedResult = Event.update updatableEvent events
+    let notUpdatedResult = Event.update notUpdatableEvent events
+
+    Assert.AreEqual(6, updatedResult.Length)
+    Assert.AreEqual(6, notUpdatedResult.Length)
+
+    Assert.AreEqual("UPDATE", updatedResult[0].Name)
+    Assert.AreEqual("very old 1", updatedResult[1].Name)
+    Assert.AreEqual("old 1", updatedResult[2].Name)
+    Assert.AreEqual("deleted 1", updatedResult[3].Name)
+    Assert.AreEqual("not so old 2", updatedResult[4].Name)
+    Assert.AreEqual("important next year 1", updatedResult[5].Name)
+
+    Assert.AreEqual("test 2", notUpdatedResult[0].Name)
+    Assert.AreEqual("very old 1", updatedResult[1].Name)
+    Assert.AreEqual("old 1", updatedResult[2].Name)
+    Assert.AreEqual("deleted 1", updatedResult[3].Name)
+    Assert.AreEqual("not so old 2", updatedResult[4].Name)
+    Assert.AreEqual("important next year 1", updatedResult[5].Name)
+
+[<Test>]
 let ``nextEvents should return proper Events`` () =
     let result = Event.nextEvents now events
 

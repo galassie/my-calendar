@@ -53,4 +53,22 @@ module EventHandler =
 
             Views.mainView now newData |> AnsiConsole.Write
 
+        | [ EventArguments.Delete ] ->
+            let event =
+                selectionPrompt<Event> {
+                    title "Select an Event you want to delete:"
+                    page_size 10
+                    choices (Event.nextEvents now data.Events)
+                    converter Event.toString
+                }
+                |> AnsiConsole.Prompt
+
+            let deleted = { event with SoftDeleted = true }
+            let newEvents = Event.update deleted data.Events
+            let newData = { data with Events = newEvents }
+
+            Storage.store now newData
+
+            Views.mainView now newData |> AnsiConsole.Write
+
         | _ -> markup { text "[red]Too many sub arguments provided![/]" } |> AnsiConsole.Write
