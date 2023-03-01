@@ -14,6 +14,15 @@ let ``tryParse should return proper OnlyDate if the date is valid, None otherwis
         Assert.AreEqual(expected, actual))
 
 [<Test>]
+let ``ToString should return proper string version`` () =
+    [| ({ Year = 2023; Month = 2; Day = 1 }, "2023-02-01")
+       ({ Year = 2023; Month = 12; Day = 1 }, "2023-12-01")
+       ({ Year = 2023; Month = 11; Day = 21 }, "2023-11-21") |]
+    |> Array.iter (fun (input, expected) ->
+        let actual = input.ToString()
+        Assert.AreEqual(expected, actual))
+
+[<Test>]
 let ``compare should compare properly`` () =
     [| ({ Year = 2023; Month = 2; Day = 28 }, { Year = 2023; Month = 2; Day = 27 }, 1)
        ({ Year = 2023; Month = 2; Day = 27 }, { Year = 2023; Month = 2; Day = 28 }, -1)

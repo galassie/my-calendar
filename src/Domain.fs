@@ -59,13 +59,23 @@ type OnlyDate =
     { Year: int
       Month: int
       Day: int }
-    
+
     static member TryParse(input: string) =
         let success, result = DateOnly.TryParse(input)
+
         if success then
-            Some { Year = result.Year; Month = result.Month; Day = result.Day }
+            Some
+                { Year = result.Year
+                  Month = result.Month
+                  Day = result.Day }
         else
             None
+
+    override self.ToString() =
+        let year = sprintf "%04i" self.Year
+        let month = sprintf "%02i" self.Month
+        let day = sprintf "%02i" self.Day
+        $"{year}-{month}-{day}"
 
 type RecurringEvent =
     { Id: Guid
@@ -109,23 +119,23 @@ module ToDo =
     let toString (todo: ToDo) = $"{todo.Name}: {todo.Description}"
 
     let private equalId (first: ToDo) (second: ToDo) = first.Id.Equals(second.Id)
-        
+
     let update (todo: ToDo) (todos: ToDo array) =
         Array.tryFindIndex (equalId todo) todos
         |> function
             | None -> todos
             | Some index -> Array.updateAt index todo todos
-            
+
     let active (todos: ToDo array) =
         todos
         |> Array.filter (fun td -> not td.SoftDeleted && Option.isNone td.MarkedDoneAt)
         |> Array.sortByDescending (fun td -> td.CreatedAt)
-            
+
     let markedDone (todos: ToDo array) =
         todos
         |> Array.filter (fun td -> Option.isSome td.MarkedDoneAt)
         |> Array.sortByDescending (fun td -> td.CreatedAt)
-            
+
     let deletable (todos: ToDo array) =
         todos
         |> Array.filter (fun td -> not td.SoftDeleted)
@@ -149,14 +159,11 @@ module ToDo =
 [<RequireQualifiedAccess>]
 module Event =
 
-    let toString (event: Event) = 
-        let year = sprintf "%04i" event.When.Year
-        let month = sprintf "%02i" event.When.Month
-        let day = sprintf "%02i" event.When.Day
-        $"{event.Name}: {event.Description} ({year}-{month}-{day})"
+    let toString (event: Event) =
+        $"{event.Name}: {event.Description} ({event.When.ToString()})"
 
     let private equalId (first: Event) (second: Event) = first.Id.Equals(second.Id)
-        
+
     let update (event: Event) (events: Event array) =
         Array.tryFindIndex (equalId event) events
         |> function
@@ -164,7 +171,10 @@ module Event =
             | Some index -> Array.updateAt index event events
 
     let nextEvents (now: DateTime) (events: Event array) =
-        let nowAsOnlyDate = { Year = now.Year; Month = now.Month; Day = now.Day }
+        let nowAsOnlyDate =
+            { Year = now.Year
+              Month = now.Month
+              Day = now.Day }
 
         events
         |> Array.filter (fun ev -> not ev.SoftDeleted)
