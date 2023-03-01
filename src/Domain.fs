@@ -150,7 +150,11 @@ module ToDo =
 [<RequireQualifiedAccess>]
 module Event =
 
-    let toString (event: Event) = $"{event.Name}: {event.Description} ({event.When.Year}-{event.When.Month}-{event.When.Day})"
+    let toString (event: Event) = 
+        let year = sprintf "%04i" event.When.Year
+        let month = sprintf "%02i" event.When.Month
+        let day = sprintf "%02i" event.When.Day
+        $"{event.Name}: {event.Description} ({year}-{month}-{day})"
 
     let private equalId (first: Event) (second: Event) = first.Id.Equals(second.Id)
         

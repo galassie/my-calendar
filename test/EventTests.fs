@@ -4,7 +4,7 @@ open System
 open MyCalendar
 open NUnit.Framework
 
-let now = DateTime.Now
+let now = DateTime.Parse("2023-6-5")
 
 let events: Event array =
     [| { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
@@ -75,12 +75,12 @@ let ``toString should return proper stringify version of the Event`` () =
 
     Assert.AreEqual(6, result.Length)
 
-    Assert.AreEqual($"test 2: it's a test 2 ({now.Year}-{now.Month}-{now.Day})", result[0])
-    Assert.AreEqual($"very old 1: very old 1 ({now.Year - 1}-{now.Month}-{now.Day})", result[1])
-    Assert.AreEqual($"old 1: old 1 ({now.Year}-{now.Month - 3}-{now.Day})", result[2])
-    Assert.AreEqual($"deleted 1: deleted 1 ({now.Year}-{now.Month}-{now.Day})", result[3])
-    Assert.AreEqual($"not so old 2: not so old 2 ({now.Year}-{now.Month}-{now.Day - 2})", result[4])
-    Assert.AreEqual($"important next year 1: important next year 1 ({now.Year + 1}-{now.Month}-{now.Day})", result[5])
+    Assert.AreEqual("test 2: it's a test 2 (2023-06-05)", result[0])
+    Assert.AreEqual("very old 1: very old 1 (2022-06-05)", result[1])
+    Assert.AreEqual("old 1: old 1 (2023-03-05)", result[2])
+    Assert.AreEqual("deleted 1: deleted 1 (2023-06-05)", result[3])
+    Assert.AreEqual("not so old 2: not so old 2 (2023-06-03)", result[4])
+    Assert.AreEqual("important next year 1: important next year 1 (2024-06-05)", result[5])
 
 [<Test>]
 let ``update should return updated version of the Event array if Event is found, based on Id, or return the same version`` () =

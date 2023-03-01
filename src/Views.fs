@@ -16,11 +16,12 @@ module Views =
                 [| calendar {
                        events [| calendarEvent { date_time now } |]
                        highlight_style (style { foreground Color.Green })
+                       header_style (style { foreground Color.Blue })
                    } |]
 
             row
-                [| text {
-                       text $"{now.Day} {now.DayOfWeek}"
+                [| markup {
+                       text $"[blue]{now.Day} {now.DayOfWeek}[/]"
                        centered
                    } |]
         }
@@ -32,17 +33,21 @@ module Views =
                 let str = ToDo.toString todo
 
                 if Option.isSome todo.MarkedDoneAt then
-                    markup { text $"· [strikethrough]{str}[/]" }
+                    markup { text $"[strikethrough grey]➢ {str}[/]" }
                 else
-                    markup { text $"· {str}" })
+                    markup { text $"➢ {str}" })
 
         panel {
             expand
             width 32
             height 32
-            header_text "Todo"
+            header_text "[bold]Todo[/]"
+            border_color Color.Blue
             content_renderable (rows { items_renderable toShow })
         }
+
+    let private todayEvent (now: DateTime) (event: Event) =
+        now.Day = event.When.Day && now.Month = event.When.Month && now.Year = event.When.Year
 
     let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
         let nextEvents = Event.nextEvents now events
@@ -51,16 +56,19 @@ module Views =
             |> Array.map (fun event ->
                 let str = Event.toString event
 
-                if event.IsImportant then
-                    markup { text $"· [yellow]{str}[/]" }
+                let isImportant = if event.IsImportant then " [red]⚠[/]" else ""
+
+                if todayEvent now event then
+                    markup { text $"➢ [green]{str}[/]{isImportant}" }
                 else
-                    markup { text $"· {str}" })
+                    markup { text $"➢ {str}{isImportant}" })
 
         panel {
             expand
             width 32
             height 32
-            header_text "Next events"
+            header_text "[bold]Next events[/]"
+            border_color Color.Blue
             content_renderable (rows { items_renderable toShow })
         }
 

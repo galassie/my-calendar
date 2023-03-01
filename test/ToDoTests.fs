@@ -4,7 +4,7 @@ open System
 open MyCalendar
 open NUnit.Framework
 
-let now = DateTime.Now
+let now = DateTime.Parse("2023-03-12")
 
 let todos: ToDo array =
     [| { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
