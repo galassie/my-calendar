@@ -50,7 +50,6 @@ type Month =
     | December
 
 type RecurringType =
-    | EveryDay
     | EveryWeek of dayOfWeek: DayOfWeek
     | EveryMonth of day: Day
     | EveryYear of month: Month * day: Day
