@@ -22,4 +22,8 @@ module MainHandler =
             let subArgs = subArgs.GetAllResults()
             EventHandler.handle now data subArgs
 
+        | [ RecurringEvent subArgs ] ->
+            let subArgs = subArgs.GetAllResults()
+            RecurringEventHandler.handle now data subArgs
+
         | _ -> markup { text "[red]Too many arguments provided![/]" } |> AnsiConsole.Write
