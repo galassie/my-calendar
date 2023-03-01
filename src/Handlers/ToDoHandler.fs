@@ -28,7 +28,7 @@ module ToDoHandler =
             let newToDos = Array.append [| todo |] data.ToDos
             let newData = { data with ToDos = newToDos }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 
@@ -64,7 +64,7 @@ module ToDoHandler =
             let newToDos = ToDo.update updatedTodo data.ToDos
             let newData = { data with ToDos = newToDos }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 
@@ -82,7 +82,7 @@ module ToDoHandler =
             let newToDos = ToDo.update markedDone data.ToDos
             let newData = { data with ToDos = newToDos }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 
@@ -100,7 +100,7 @@ module ToDoHandler =
             let newToDos = ToDo.update unmarkedDone data.ToDos
             let newData = { data with ToDos = newToDos }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 
@@ -118,7 +118,7 @@ module ToDoHandler =
             let newToDos = ToDo.update deleted data.ToDos
             let newData = { data with ToDos = newToDos }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 

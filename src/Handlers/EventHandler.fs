@@ -49,7 +49,7 @@ module EventHandler =
             let newEvents = Array.append [| event |] data.Events
             let newData = { data with Events = newEvents }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 
@@ -67,7 +67,7 @@ module EventHandler =
             let newEvents = Event.update deleted data.Events
             let newData = { data with Events = newEvents }
 
-            Storage.store now newData
+            Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 

@@ -9,7 +9,7 @@ module MainHandler =
 
     let handle (args: Arguments list) =
         let now = DateTime.Now
-        let data = Storage.retrieve now
+        let data = Storage.retrieve ()
 
         match args with
         | [ Show ] -> Views.mainView now data |> AnsiConsole.Write

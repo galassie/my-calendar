@@ -7,9 +7,8 @@ open FSharp.Json
 [<RequireQualifiedAccess>]
 module Storage =
 
-    let retrieve (date: DateTime) =
-        let year = date.Year
-        let path = Path.Combine(Path.GetTempPath(), $"mycalendar-{year}.json")
+    let retrieve () =
+        let path = Path.Combine(Environment.CurrentDirectory, $"mycalendar-store.json")
 
         let data =
             if (File.Exists(path)) then
@@ -19,10 +18,9 @@ module Storage =
 
         data
 
-    let store (date: DateTime) (data: MyCalendarData) =
+    let store (data: MyCalendarData) =
         try
-            let year = date.Year
-            let path = Path.Combine(Path.GetTempPath(), $"mycalendar-{year}.json")
+            let path = Path.Combine(Environment.CurrentDirectory, $"mycalendar-store.json")
 
             let str = Json.serialize data
             File.WriteAllText(path, str)
