@@ -16,7 +16,7 @@ module Program =
             )
 
         let parser =
-            ArgumentParser.Create<Arguments>(programName = "mycalendar", errorHandler = errorHandler)
+            ArgumentParser.Create<Arguments>(programName = "my-calendar", errorHandler = errorHandler)
 
         let results = parser.ParseCommandLine args
         let args = results.GetAllResults()
