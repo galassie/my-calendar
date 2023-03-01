@@ -43,6 +43,7 @@ module Views =
             height 32
             header_text "[bold]Todo[/]"
             border_color Color.Blue
+            box_border BoxBorder.Rounded
             content_renderable (rows { items_renderable toShow })
         }
 
@@ -69,6 +70,7 @@ module Views =
             height 32
             header_text "[bold]Next events[/]"
             border_color Color.Blue
+            box_border BoxBorder.Rounded
             content_renderable (rows { items_renderable toShow })
         }
 
