@@ -5,6 +5,7 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="RecurringTypeTests.fs" />
     <Compile Include="OnlyDateTests.fs" />
     <Compile Include="ToDoTests.fs" />
     <Compile Include="EventTests.fs" />

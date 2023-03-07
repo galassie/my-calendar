@@ -2,6 +2,15 @@ namespace MyCalendar
 
 open System
 
+type DayInWeek =
+    | Sunday
+    | Monday
+    | Tuesday
+    | Wednesday
+    | Thursday
+    | Friday
+    | Saturday
+
 type Day =
     | First
     | Second
@@ -50,9 +59,15 @@ type Month =
     | December
 
 type RecurringType =
-    | EveryWeek of dayOfWeek: DayOfWeek
+    | EveryWeek of dayInWeek: DayInWeek
     | EveryMonth of day: Day
     | EveryYear of month: Month * day: Day
+
+    override self.ToString() =
+        match self with
+        | EveryWeek dayInWeek -> $"Every week on {dayInWeek}"
+        | EveryMonth day -> $"Every month on {day}"
+        | EveryYear(month, day) -> $"Every year on {day} of {month}"
 
 // Creating this struct since DateOnly native type is not handled by FSharp.Json
 type OnlyDate =

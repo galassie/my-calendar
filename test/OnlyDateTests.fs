@@ -1,4 +1,4 @@
-module OnlyDate
+module OnlyDateTests
 
 open MyCalendar
 open NUnit.Framework
