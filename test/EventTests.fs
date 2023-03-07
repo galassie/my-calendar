@@ -70,8 +70,8 @@ let events: Event array =
 
 
 [<Test>]
-let ``toString should return proper stringify version of the Event`` () =
-    let result = Array.map Event.toString events
+let ``ToString should return proper stringify version of the Event`` () =
+    let result = Array.map (fun evt -> evt.ToString()) events
 
     Assert.AreEqual(6, result.Length)
 

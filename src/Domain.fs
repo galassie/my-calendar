@@ -109,6 +109,8 @@ type ToDo =
       MarkedDoneAt: DateTime option
       SoftDeleted: bool }
 
+    override self.ToString() = $"{self.Name}: {self.Description}"
+
 type Event =
     { Id: Guid
       Name: string
@@ -117,6 +119,9 @@ type Event =
       When: OnlyDate
       CreatedAt: DateTime
       SoftDeleted: bool }
+
+    override self.ToString() =
+        $"{self.Name}: {self.Description} ({self.When.ToString()})"
 
 type MyCalendarData =
     { RecurringEvents: RecurringEvent array
@@ -130,8 +135,6 @@ type MyCalendarData =
 
 [<RequireQualifiedAccess>]
 module ToDo =
-
-    let toString (todo: ToDo) = $"{todo.Name}: {todo.Description}"
 
     let private equalId (first: ToDo) (second: ToDo) = first.Id.Equals(second.Id)
 
@@ -173,9 +176,6 @@ module ToDo =
 
 [<RequireQualifiedAccess>]
 module Event =
-
-    let toString (event: Event) =
-        $"{event.Name}: {event.Description} ({event.When.ToString()})"
 
     let private equalId (first: Event) (second: Event) = first.Id.Equals(second.Id)
 

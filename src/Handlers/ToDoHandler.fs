@@ -38,7 +38,6 @@ module ToDoHandler =
                     title "Select a ToDo you want to edit:"
                     page_size 10
                     choices (ToDo.active data.ToDos)
-                    converter ToDo.toString
                 }
                 |> AnsiConsole.Prompt
 
@@ -74,7 +73,6 @@ module ToDoHandler =
                     title "Select a ToDo you want to mark as done:"
                     page_size 10
                     choices (ToDo.active data.ToDos)
-                    converter ToDo.toString
                 }
                 |> AnsiConsole.Prompt
 
@@ -92,7 +90,6 @@ module ToDoHandler =
                     title "Select a ToDo you want to undo:"
                     page_size 10
                     choices (ToDo.markedDone data.ToDos)
-                    converter ToDo.toString
                 }
                 |> AnsiConsole.Prompt
 
@@ -110,7 +107,6 @@ module ToDoHandler =
                     title "Select a ToDo you want to delete:"
                     page_size 10
                     choices (ToDo.deletable data.ToDos)
-                    converter ToDo.toString
                 }
                 |> AnsiConsole.Prompt
 

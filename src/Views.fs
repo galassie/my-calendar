@@ -30,12 +30,10 @@ module Views =
         let toShow: IRenderable array =
             todos
             |> Array.map (fun todo ->
-                let str = ToDo.toString todo
-
                 if Option.isSome todo.MarkedDoneAt then
-                    markup { text $"[strikethrough grey]➢ {str}[/]" }
+                    markup { text $"[strikethrough grey]➢ {todo}[/]" }
                 else
-                    markup { text $"➢ {str}" })
+                    markup { text $"➢ {todo}" })
 
         panel {
             expand
@@ -55,14 +53,12 @@ module Views =
         let toShow: IRenderable array =
             nextEvents
             |> Array.map (fun event ->
-                let str = Event.toString event
-
                 let isImportant = if event.IsImportant then " [red]⚠[/]" else ""
 
                 if todayEvent now event then
-                    markup { text $"➢ [green]{str}[/]{isImportant}" }
+                    markup { text $"➢ [green]{event}[/]{isImportant}" }
                 else
-                    markup { text $"➢ {str}{isImportant}" })
+                    markup { text $"➢ {event}{isImportant}" })
 
         panel {
             expand

@@ -46,8 +46,8 @@ let todos: ToDo array =
 
 
 [<Test>]
-let ``toString should return proper stringify version of the ToDo`` () =
-    let result = Array.map ToDo.toString todos
+let ``ToString should return proper stringify version of the ToDo`` () =
+    let result = Array.map (fun td -> td.ToString()) todos
 
     Assert.AreEqual(6, result.Length)
 

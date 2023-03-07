@@ -160,7 +160,6 @@ module RecurringEventHandler =
                     title "Select a Event you want to edit:"
                     page_size 10
                     choices (Event.nextEvents now data.Events)
-                    converter Event.toString
                 }
                 |> AnsiConsole.Prompt
 
@@ -225,7 +224,6 @@ module RecurringEventHandler =
                     title "Select an Event you want to delete:"
                     page_size 10
                     choices (Event.nextEvents now data.Events)
-                    converter Event.toString
                 }
                 |> AnsiConsole.Prompt
 
