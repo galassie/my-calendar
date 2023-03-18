@@ -9,6 +9,7 @@
     <Compile Include="OnlyDateTests.fs" />
     <Compile Include="ToDoTests.fs" />
     <Compile Include="EventTests.fs" />
+    <Compile Include="RecurringEventTests.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>

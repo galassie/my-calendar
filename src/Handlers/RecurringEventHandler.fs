@@ -120,13 +120,14 @@ module RecurringEventHandler =
         match args with
         | [ RecurringEventArguments.Add ] ->
             let name =
-                textPrompt<string> { text "What's the name of the new Event?" }
+                textPrompt<string> { text "What's the name of the new Recurring Event?" }
                 |> AnsiConsole.Prompt
 
             let description =
                 textPrompt<string> { text "Give it a brief description:" } |> AnsiConsole.Prompt
 
             let recurringType = recurringTypePrompt ()
+            AnsiConsole.WriteLine $"{recurringType}"
 
             let isImportant =
                 textPrompt<bool> {
@@ -156,44 +157,29 @@ module RecurringEventHandler =
 
         | [ RecurringEventArguments.Edit ] ->
             let event =
-                selectionPrompt<Event> {
-                    title "Select a Event you want to edit:"
+                selectionPrompt<RecurringEvent> {
+                    title "Select a Recurring Event you want to edit:"
                     page_size 10
-                    choices (Event.nextEvents now data.Events)
+                    choices (data.RecurringEvents)
                 }
                 |> AnsiConsole.Prompt
 
             let name =
                 textPrompt<string> {
-                    text "What's the new name of the Event?"
+                    text "What's the new name of the Recurring Event?"
                     default_value event.Name
                 }
                 |> AnsiConsole.Prompt
 
             let description =
                 textPrompt<string> {
-                    text "What's the new description of the Event?"
+                    text "What's the new description of the Recurring Event?"
                     default_value event.Description
                 }
                 |> AnsiConsole.Prompt
 
-            let onlyDate =
-                textPrompt<string> {
-                    text "What's the new date? [grey](yyyy-mm-dd)[/]"
-
-                    validator (fun input ->
-                        match OnlyDate.TryParse(input) with
-                        | Some _ -> ValidationResult.Success()
-                        | None -> ValidationResult.Error "[red]The date inserted is not valid![/]")
-
-                    default_value (event.When.ToString())
-                }
-                |> AnsiConsole.Prompt
-                |> OnlyDate.TryParse
-                |> Option.defaultValue
-                    { Year = now.Year
-                      Month = now.Month
-                      Day = now.Day }
+            let recurringType = recurringTypePrompt ()
+            AnsiConsole.WriteLine $"{recurringType}"
 
             let isImportant =
                 textPrompt<bool> {
@@ -204,32 +190,34 @@ module RecurringEventHandler =
                 }
                 |> AnsiConsole.Prompt
 
-            let updatedEvent =
-                { event with
-                    Name = name
-                    Description = description
-                    When = onlyDate
-                    IsImportant = isImportant }
+            let updatedRecurringEvent =
+                { Id = Guid.NewGuid()
+                  Name = name
+                  Description = description
+                  IsImportant = isImportant
+                  RecurringType = recurringType
+                  CreatedAt = now
+                  SoftDeleted = false }
 
-            let newEvents = Event.update updatedEvent data.Events
-            let newData = { data with Events = newEvents }
+            let newRecurringEvents = RecurringEvent.update updatedRecurringEvent data.RecurringEvents
+            let newData = { data with RecurringEvents = newRecurringEvents }
 
             Storage.store newData
 
             Views.mainView now newData |> AnsiConsole.Write
 
         | [ RecurringEventArguments.Delete ] ->
-            let event =
-                selectionPrompt<Event> {
-                    title "Select an Event you want to delete:"
+            let recurringEvent =
+                selectionPrompt<RecurringEvent> {
+                    title "Select a Recurring Event you want to delete:"
                     page_size 10
-                    choices (Event.nextEvents now data.Events)
+                    choices (data.RecurringEvents)
                 }
                 |> AnsiConsole.Prompt
 
-            let deleted = { event with SoftDeleted = true }
-            let newEvents = Event.update deleted data.Events
-            let newData = { data with Events = newEvents }
+            let deleted = { recurringEvent with SoftDeleted = true }
+            let newRecurringEvents = RecurringEvent.update deleted data.RecurringEvents
+            let newData = { data with RecurringEvents = newRecurringEvents }
 
             Storage.store newData
 

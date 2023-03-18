@@ -101,6 +101,9 @@ type RecurringEvent =
       CreatedAt: DateTime
       SoftDeleted: bool }
 
+    override self.ToString() =
+        $"{self.Name}: {self.Description} ({self.RecurringType.ToString()})"
+
 type ToDo =
     { Id: Guid
       Name: string
@@ -196,3 +199,14 @@ module Event =
         |> Array.filter (fun ev -> (compare nowAsOnlyDate ev.When) <= 0)
         |> Array.sortBy (fun ev -> ev.When)
         |> Array.truncate 5
+
+[<RequireQualifiedAccess>]
+module RecurringEvent =
+
+    let private equalId (first: RecurringEvent) (second: RecurringEvent) = first.Id.Equals(second.Id)
+
+    let update (event: RecurringEvent) (events: RecurringEvent array) =
+        Array.tryFindIndex (equalId event) events
+        |> function
+            | None -> events
+            | Some index -> Array.updateAt index event events
