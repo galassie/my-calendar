@@ -58,7 +58,7 @@ module EventHandler =
                 selectionPrompt<Event> {
                     title "Select a Event you want to edit:"
                     page_size 10
-                    choices (Event.nextEvents now data.Events)
+                    choices (Event.nextEvents Constants.maxCount now data.Events)
                 }
                 |> AnsiConsole.Prompt
 
@@ -115,7 +115,7 @@ module EventHandler =
                 selectionPrompt<Event> {
                     title "Select an Event you want to delete:"
                     page_size 10
-                    choices (Event.nextEvents now data.Events)
+                    choices (Event.nextEvents Constants.maxCount now data.Events)
                 }
                 |> AnsiConsole.Prompt
 

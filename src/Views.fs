@@ -49,7 +49,7 @@ module Views =
         now.Day = event.When.Day && now.Month = event.When.Month && now.Year = event.When.Year
 
     let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
-        let nextEvents = Event.nextEvents now events
+        let nextEvents = Event.nextEvents Constants.maxCount now events
         let toShow: IRenderable array =
             nextEvents
             |> Array.map (fun event ->

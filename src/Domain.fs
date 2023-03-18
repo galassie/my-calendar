@@ -137,6 +137,11 @@ type MyCalendarData =
           Events = Array.empty<Event> }
 
 [<RequireQualifiedAccess>]
+module Constants = 
+
+    let maxCount = 5
+
+[<RequireQualifiedAccess>]
 module ToDo =
 
     let private equalId (first: ToDo) (second: ToDo) = first.Id.Equals(second.Id)
@@ -188,7 +193,7 @@ module Event =
             | None -> events
             | Some index -> Array.updateAt index event events
 
-    let nextEvents (now: DateTime) (events: Event array) =
+    let nextEvents (maxCount: int) (now: DateTime) (events: Event array) =
         let nowAsOnlyDate =
             { Year = now.Year
               Month = now.Month
@@ -198,7 +203,7 @@ module Event =
         |> Array.filter (fun ev -> not ev.SoftDeleted)
         |> Array.filter (fun ev -> (compare nowAsOnlyDate ev.When) <= 0)
         |> Array.sortBy (fun ev -> ev.When)
-        |> Array.truncate 5
+        |> Array.truncate maxCount
 
 [<RequireQualifiedAccess>]
 module RecurringEvent =

@@ -129,7 +129,8 @@ let ``update should return updated version of the Event array if Event is found,
 
 [<Test>]
 let ``nextEvents should return proper Events`` () =
-    let result = Event.nextEvents now events
+    let maxCount = 5
+    let result = Event.nextEvents maxCount now events
 
     // The Events previous today and SoftDeleted should be removed
     Assert.AreEqual(2, result.Length)
