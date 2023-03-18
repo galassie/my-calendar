@@ -22,7 +22,7 @@ module MainHandler =
             let subArgs = subArgs.GetAllResults()
             EventHandler.handle now data subArgs
 
-        | [ RecurringEvent subArgs ] ->
+        | [ Recurring_Event subArgs ] ->
             let subArgs = subArgs.GetAllResults()
             RecurringEventHandler.handle now data subArgs
 

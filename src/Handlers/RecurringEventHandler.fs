@@ -156,7 +156,7 @@ module RecurringEventHandler =
             Views.mainView now newData |> AnsiConsole.Write
 
         | [ RecurringEventArguments.Edit ] ->
-            let event =
+            let recurringEvent =
                 selectionPrompt<RecurringEvent> {
                     title "Select a Recurring Event you want to edit:"
                     page_size 10
@@ -167,14 +167,14 @@ module RecurringEventHandler =
             let name =
                 textPrompt<string> {
                     text "What's the new name of the Recurring Event?"
-                    default_value event.Name
+                    default_value recurringEvent.Name
                 }
                 |> AnsiConsole.Prompt
 
             let description =
                 textPrompt<string> {
                     text "What's the new description of the Recurring Event?"
-                    default_value event.Description
+                    default_value recurringEvent.Description
                 }
                 |> AnsiConsole.Prompt
 
@@ -186,12 +186,12 @@ module RecurringEventHandler =
                     text "Is it important? [grey](n/y)[/]"
                     choices [| true; false |]
                     converter (fun b -> if b then "y" else "n")
-                    default_value event.IsImportant
+                    default_value recurringEvent.IsImportant
                 }
                 |> AnsiConsole.Prompt
 
             let updatedRecurringEvent =
-                { Id = Guid.NewGuid()
+                { Id = recurringEvent.Id
                   Name = name
                   Description = description
                   IsImportant = isImportant

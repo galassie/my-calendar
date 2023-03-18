@@ -50,8 +50,12 @@ module Views =
 
     let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
         let nextEvents = Event.nextEvents Constants.maxCount now events
+        let nextRecurringEvents = RecurringEvent.nextEvents Constants.maxCount now recurringEvents
         let toShow: IRenderable array =
-            nextEvents
+            [| nextEvents; nextRecurringEvents |]
+            |> Array.reduce Array.append
+            |> Array.sortBy (fun evt -> evt.When)
+            |> Array.truncate Constants.maxCount
             |> Array.map (fun event ->
                 let isImportant = if event.IsImportant then " [red]⚠[/]" else ""
 

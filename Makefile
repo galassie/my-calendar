@@ -36,7 +36,15 @@ event-delete:
 
 # Run the recurring-event add command
 recurring-event-add:
-	dotnet run --project src/MyCalendar.fsproj recurringevent add
+	dotnet run --project src/MyCalendar.fsproj recurring-event add
+
+# Run the recurring-event edit command
+recurring-event-edit:
+	dotnet run --project src/MyCalendar.fsproj recurring-event edit
+
+# Run the recurring-event delete command
+recurring-event-delete:
+	dotnet run --project src/MyCalendar.fsproj recurring-event delete
 
 # Format all the project
 format:

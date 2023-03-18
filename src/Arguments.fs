@@ -47,7 +47,7 @@ and Arguments =
     | [<CliPrefix(CliPrefix.None)>] Show
     | [<CliPrefix(CliPrefix.None)>] ToDo of ParseResults<ToDoArguments>
     | [<CliPrefix(CliPrefix.None)>] Event of ParseResults<EventArguments>
-    | [<CliPrefix(CliPrefix.None)>] RecurringEvent of ParseResults<RecurringEventArguments>
+    | [<CliPrefix(CliPrefix.None)>] Recurring_Event of ParseResults<RecurringEventArguments>
 
     interface IArgParserTemplate with
         member s.Usage =
@@ -55,4 +55,4 @@ and Arguments =
             | Show -> "show the main view of your calendar"
             | ToDo _ -> "allow to perform operations on your ToDos"
             | Event _ -> "allow to perform operations on your Events"
-            | RecurringEvent _ -> "allow to perform operations on your RecurringEvents"
+            | Recurring_Event _ -> "allow to perform operations on your RecurringEvents"
