@@ -211,7 +211,7 @@ module RecurringEventHandler =
                 selectionPrompt<RecurringEvent> {
                     title "Select a Recurring Event you want to delete:"
                     page_size 10
-                    choices (data.RecurringEvents)
+                    choices (RecurringEvent.getViewable Constants.maxCount data.RecurringEvents)
                 }
                 |> AnsiConsole.Prompt
 

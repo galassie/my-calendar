@@ -249,7 +249,7 @@ module ToDo =
         | None -> false
         | Some dateTime -> dateTime.Day + days <= now.Day
 
-    let extractForView (now: DateTime) (todos: ToDo array) =
+    let getViewable (now: DateTime) (todos: ToDo array) =
         let (markedDone, notMarkedDone) =
             todos
             |> Array.filter (fun td -> not td.SoftDeleted)
@@ -356,10 +356,16 @@ module RecurringEvent =
                      CreatedAt = event.CreatedAt
                      SoftDeleted = event.IsImportant } |]
 
-    let nextEvents (maxCount: int) (now: DateTime) (events: RecurringEvent array) =
+    let generateEvents (maxCount: int) (now: DateTime) (events: RecurringEvent array) =
         events
         |> Array.filter (fun evt -> not evt.SoftDeleted)
         |> Array.map (mapToEvents maxCount now)
-        |> Array.reduce Array.append
+        |> Array.fold Array.append [||]
         |> Array.sortBy (fun evt -> evt.When)
+        |> Array.truncate maxCount
+
+    let getViewable (maxCount: int) (events: RecurringEvent array) =
+        events
+        |> Array.filter (fun evt -> not evt.SoftDeleted)
+        |> Array.sortBy (fun evt -> evt.CreatedAt)
         |> Array.truncate maxCount

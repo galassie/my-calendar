@@ -133,8 +133,8 @@ let ``deletable should return proper ToDos`` () =
     Assert.AreEqual("done very old 1", result[4].Name)
 
 [<Test>]
-let ``extractForView should return proper ToDos`` () =
-    let result = ToDo.extractForView now todos
+let ``getViewable should return proper ToDos`` () =
+    let result = ToDo.getViewable now todos
 
     // The SoftDeleted and the MarkedDone older than 5 days should be removed
     Assert.AreEqual(4, result.Length)

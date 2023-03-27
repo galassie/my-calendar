@@ -50,7 +50,7 @@ module Views =
 
     let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
         let nextEvents = Event.nextEvents Constants.maxCount now events
-        let nextRecurringEvents = RecurringEvent.nextEvents Constants.maxCount now recurringEvents
+        let nextRecurringEvents = RecurringEvent.generateEvents Constants.maxCount now recurringEvents
         let toShow: IRenderable array =
             [| nextEvents; nextRecurringEvents |]
             |> Array.reduce Array.append
@@ -75,7 +75,7 @@ module Views =
         }
 
     let mainView (now: DateTime) (data: MyCalendarData) =
-        let todos = ToDo.extractForView now data.ToDos
+        let todos = ToDo.getViewable now data.ToDos
 
         grid {
             number_of_columns 3
