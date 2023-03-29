@@ -216,7 +216,7 @@ type MyCalendarData =
 [<RequireQualifiedAccess>]
 module Constants =
 
-    let maxCount = 5
+    let maxCount = 14
 
 [<RequireQualifiedAccess>]
 module ToDo =
@@ -270,13 +270,14 @@ module Event =
             | None -> events
             | Some index -> Array.updateAt index event events
 
-    let nextEvents (maxCount: int) (now: DateTime) (events: Event array) =
+    let nextEvents (onlyImportants: bool) (maxCount: int) (now: DateTime) (events: Event array) =
         let nowAsOnlyDate =
             { Year = now.Year
               Month = now.Month
               Day = now.Day }
 
         events
+        |> Array.filter (fun evt -> not onlyImportants || evt.IsImportant)
         |> Array.filter (fun evt -> not evt.SoftDeleted)
         |> Array.filter (fun evt -> (compare nowAsOnlyDate evt.When) <= 0)
         |> Array.sortBy (fun evt -> evt.When)
@@ -356,8 +357,9 @@ module RecurringEvent =
                      CreatedAt = event.CreatedAt
                      SoftDeleted = event.IsImportant } |]
 
-    let generateEvents (maxCount: int) (now: DateTime) (events: RecurringEvent array) =
+    let generateNextEvents (onlyImportants: bool) (maxCount: int) (now: DateTime) (events: RecurringEvent array) =
         events
+        |> Array.filter (fun evt -> not onlyImportants || evt.IsImportant)
         |> Array.filter (fun evt -> not evt.SoftDeleted)
         |> Array.map (mapToEvents maxCount now)
         |> Array.fold Array.append [||]

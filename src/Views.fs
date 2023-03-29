@@ -8,7 +8,7 @@ open Spectre.Console.Rendering
 [<RequireQualifiedAccess>]
 module Views =
 
-    let calendar (now: DateTime) =
+    let calendarView (now: DateTime) =
         grid {
             number_of_columns 1
 
@@ -26,7 +26,7 @@ module Views =
                    } |]
         }
 
-    let todo (todos: ToDo array) =
+    let todoView (todos: ToDo array) =
         let toShow: IRenderable array =
             todos
             |> Array.map (fun todo ->
@@ -46,16 +46,13 @@ module Views =
         }
 
     let private todayEvent (now: DateTime) (event: Event) =
-        now.Day = event.When.Day && now.Month = event.When.Month && now.Year = event.When.Year
+        now.Day = event.When.Day
+        && now.Month = event.When.Month
+        && now.Year = event.When.Year
 
-    let nextEvents (now: DateTime) (recurringEvents: RecurringEvent array) (events: Event array) =
-        let nextEvents = Event.nextEvents Constants.maxCount now events
-        let nextRecurringEvents = RecurringEvent.generateEvents Constants.maxCount now recurringEvents
+    let eventsView (headerText: string) (now: DateTime) (events: Event array) =
         let toShow: IRenderable array =
-            [| nextEvents; nextRecurringEvents |]
-            |> Array.reduce Array.append
-            |> Array.sortBy (fun evt -> evt.When)
-            |> Array.truncate Constants.maxCount
+            events
             |> Array.map (fun event ->
                 let isImportant = if event.IsImportant then " [red]⚠[/]" else ""
                 // Events generated from RecurringEvents have an empty Guid as Id
@@ -69,8 +66,8 @@ module Views =
         panel {
             expand
             width 32
-            height 32
-            header_text "[bold]Next events[/]"
+            height 16
+            header_text $"[bold]{headerText}[/]"
             border_color Color.Blue
             box_border BoxBorder.Rounded
             content_renderable (rows { items_renderable toShow })
@@ -79,14 +76,36 @@ module Views =
     let mainView (now: DateTime) (data: MyCalendarData) =
         let todos = ToDo.getViewable now data.ToDos
 
+        let nextEvents = Event.nextEvents false Constants.maxCount now data.Events
+        let nextRecurringEvents =
+            RecurringEvent.generateNextEvents false Constants.maxCount now data.RecurringEvents
+        let events =
+            [| nextEvents; nextRecurringEvents |]
+            |> Array.reduce Array.append
+            |> Array.sortBy (fun evt -> evt.When)
+            |> Array.truncate Constants.maxCount
+
+        let nextImportantEvents = Event.nextEvents true Constants.maxCount now data.Events
+        let nextImportantRecurringEvents =
+            RecurringEvent.generateNextEvents true Constants.maxCount now data.RecurringEvents
+        let importantEvents =
+            [| nextImportantEvents; nextImportantRecurringEvents |]
+            |> Array.reduce Array.append
+            |> Array.sortBy (fun evt -> evt.When)
+            |> Array.truncate Constants.maxCount
+
         grid {
             number_of_columns 3
             empty_row
 
             row
-                [| calendar now
-                   todo todos
-                   nextEvents now data.RecurringEvents data.Events |]
+                [| calendarView now
+                   grid {
+                       number_of_columns 1
+                       row [| eventsView "Next events" now events |]
+                       row [| eventsView "Next important events!" now importantEvents |]
+                   }
+                   todoView todos |]
 
             empty_row
         }

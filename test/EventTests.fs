@@ -128,9 +128,9 @@ let ``update should return updated version of the Event array if Event is found,
     Assert.AreEqual("important next year 1", updatedResult[5].Name)
 
 [<Test>]
-let ``nextEvents should return proper Events`` () =
+let ``nextEvents with onlyImportants set to false should return proper Events`` () =
     let maxCount = 5
-    let result = Event.nextEvents maxCount now events
+    let result = Event.nextEvents false maxCount now events
 
     // The Events previous today and SoftDeleted should be removed
     Assert.AreEqual(2, result.Length)
@@ -138,3 +138,13 @@ let ``nextEvents should return proper Events`` () =
     // Ordered by When with the upcoming one on top
     Assert.AreEqual("test 2", result[0].Name)
     Assert.AreEqual("important next year 1", result[1].Name)
+
+[<Test>]
+let ``nextEvents with onlyImportants set to true should return proper Events`` () =
+    let maxCount = 5
+    let result = Event.nextEvents true maxCount now events
+
+    // The Events previous today and SoftDeleted and not IsImportant should be removed
+    Assert.AreEqual(1, result.Length)
+
+    Assert.AreEqual("important next year 1", result[0].Name)
