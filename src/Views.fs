@@ -58,11 +58,13 @@ module Views =
             |> Array.truncate Constants.maxCount
             |> Array.map (fun event ->
                 let isImportant = if event.IsImportant then " [red]⚠[/]" else ""
+                // Events generated from RecurringEvents have an empty Guid as Id
+                let isFromRecurring = if event.Id = Guid.Empty then " [yellow]⟳[/]" else ""
 
                 if todayEvent now event then
-                    markup { text $"➢ [green]{event}[/]{isImportant}" }
+                    markup { text $"➢ [green]{event}[/]{isFromRecurring}{isImportant}" }
                 else
-                    markup { text $"➢ {event}{isImportant}" })
+                    markup { text $"➢ {event}{isFromRecurring}{isImportant}" })
 
         panel {
             expand
