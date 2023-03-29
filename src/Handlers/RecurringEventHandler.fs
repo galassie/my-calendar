@@ -113,7 +113,7 @@ module RecurringEventHandler =
         | RecurringTypePromptSelection.EveryYear ->
             let month = monthPrompt ()
             let day = dayPrompt ()
-            RecurringType.EveryYear (month, day)
+            RecurringType.EveryYear(month, day)
 
 
     let handle (now: DateTime) (data: MyCalendarData) (args: RecurringEventArguments list) =
@@ -149,7 +149,10 @@ module RecurringEventHandler =
                   SoftDeleted = false }
 
             let newRecurringEvents = Array.append [| recurringEvent |] data.RecurringEvents
-            let newData = { data with RecurringEvents = newRecurringEvents }
+
+            let newData =
+                { data with
+                    RecurringEvents = newRecurringEvents }
 
             Storage.store newData
 
@@ -199,8 +202,12 @@ module RecurringEventHandler =
                   CreatedAt = now
                   SoftDeleted = false }
 
-            let newRecurringEvents = RecurringEvent.update updatedRecurringEvent data.RecurringEvents
-            let newData = { data with RecurringEvents = newRecurringEvents }
+            let newRecurringEvents =
+                RecurringEvent.update updatedRecurringEvent data.RecurringEvents
+
+            let newData =
+                { data with
+                    RecurringEvents = newRecurringEvents }
 
             Storage.store newData
 
@@ -215,9 +222,15 @@ module RecurringEventHandler =
                 }
                 |> AnsiConsole.Prompt
 
-            let deleted = { recurringEvent with SoftDeleted = true }
+            let deleted =
+                { recurringEvent with
+                    SoftDeleted = true }
+
             let newRecurringEvents = RecurringEvent.update deleted data.RecurringEvents
-            let newData = { data with RecurringEvents = newRecurringEvents }
+
+            let newData =
+                { data with
+                    RecurringEvents = newRecurringEvents }
 
             Storage.store newData
 

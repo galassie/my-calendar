@@ -26,7 +26,7 @@ let events: RecurringEvent array =
          Description = "it's a test year 2"
          CreatedAt = now.AddMonths(-3)
          IsImportant = true
-         RecurringType = EveryYear (June, Thirteenth) 
+         RecurringType = EveryYear(June, Thirteenth)
          SoftDeleted = false }
        { Id = Guid.Parse("f3b150de-bf64-49dd-8af4-bbac81929237")
          Name = "test week 2 DELETED"
@@ -38,7 +38,7 @@ let events: RecurringEvent array =
 
 
 [<Test>]
-let ``ToString should return proper stringify version of the RecurringEvent`` () =
+let ``ToString should return proper stringify RecurringEvent`` () =
     let result = Array.map (fun evt -> evt.ToString()) events
 
     Assert.AreEqual(4, result.Length)
@@ -49,23 +49,26 @@ let ``ToString should return proper stringify version of the RecurringEvent`` ()
     Assert.AreEqual("test week 2 DELETED: it's a test week 2 (Every week on Tuesday)", result[3])
 
 [<Test>]
-let ``update should return updated version of the RecurringEvent array if Event is found, based on Id, or return the same version`` () =
-    let updatableRecurringEvent = 
-       { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
-         Name = "UPDATE"
-         Description = "it's a test week 2"
-         CreatedAt = now
-         IsImportant = false
-         RecurringType = EveryWeek Saturday
-         SoftDeleted = false }
-    let notUpdatableRecurringEvent = 
-      { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
-        Name = "TRY TO UPDATE"
-        Description = "it's a test 2"
-        CreatedAt = now
-        IsImportant = false
-        RecurringType = EveryWeek Saturday
-        SoftDeleted = false }
+let ``update should return updated RecurringEvent array if Event is found, based on Id, or return the same version``
+    ()
+    =
+    let updatableRecurringEvent =
+        { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
+          Name = "UPDATE"
+          Description = "it's a test week 2"
+          CreatedAt = now
+          IsImportant = false
+          RecurringType = EveryWeek Saturday
+          SoftDeleted = false }
+
+    let notUpdatableRecurringEvent =
+        { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
+          Name = "TRY TO UPDATE"
+          Description = "it's a test 2"
+          CreatedAt = now
+          IsImportant = false
+          RecurringType = EveryWeek Saturday
+          SoftDeleted = false }
 
     let updatedResult = RecurringEvent.update updatableRecurringEvent events
     let notUpdatedResult = RecurringEvent.update notUpdatableRecurringEvent events
@@ -84,7 +87,9 @@ let ``update should return updated version of the RecurringEvent array if Event 
     Assert.AreEqual("test week 2 DELETED", notUpdatedResult[3].Name)
 
 [<Test>]
-let ``generateNextEvents with onlyImportants set to false should return the correct Events from the RecurringEvents`` () =
+let ``generateNextEvents with onlyImportants set to false should return the correct Events from the RecurringEvents``
+    ()
+    =
     let maxCount = 5
     let result = RecurringEvent.generateNextEvents false maxCount now events
 
@@ -99,7 +104,9 @@ let ``generateNextEvents with onlyImportants set to false should return the corr
     Assert.AreEqual("test week 2", result[4].Name)
 
 [<Test>]
-let ``generateNextEvents with onlyImportants set to true should return the correct Events from the RecurringEvents`` () =
+let ``generateNextEvents with onlyImportants set to true should return the correct Events from the RecurringEvents``
+    ()
+    =
     let maxCount = 5
     let result = RecurringEvent.generateNextEvents true maxCount now events
 

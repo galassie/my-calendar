@@ -20,7 +20,7 @@ module Program =
 
         let results = parser.ParseCommandLine args
         let args = results.GetAllResults()
-        
+
         MainHandler.handle args
 
         0

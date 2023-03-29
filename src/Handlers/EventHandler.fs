@@ -18,24 +18,30 @@ module EventHandler =
                 textPrompt<string> { text "Give it a brief description:" } |> AnsiConsole.Prompt
 
             let onlyDate =
-                textPrompt<string> { 
+                textPrompt<string> {
                     text "When? [grey](yyyy-mm-dd)[/]"
-                    validator (fun input -> 
+
+                    validator (fun input ->
                         match OnlyDate.TryParse(input) with
-                        | Some _ -> ValidationResult.Success ()
-                        | None -> ValidationResult.Error "[red]The date inserted is not valid![/]" ) } 
+                        | Some _ -> ValidationResult.Success()
+                        | None -> ValidationResult.Error "[red]The date inserted is not valid![/]")
+                }
                 |> AnsiConsole.Prompt
                 |> OnlyDate.TryParse
-                |> Option.defaultValue { Year = now.Year; Month = now.Month; Day = now.Day }
+                |> Option.defaultValue
+                    { Year = now.Year
+                      Month = now.Month
+                      Day = now.Day }
 
             let isImportant =
-                textPrompt<bool> { 
-                    text "Is it important? [grey](N/y)[/]" 
+                textPrompt<bool> {
+                    text "Is it important? [grey](N/y)[/]"
                     choices [| true; false |]
                     converter (fun b -> if b then "y" else "n")
                     default_value false
                     hide_default_value
-                } |> AnsiConsole.Prompt
+                }
+                |> AnsiConsole.Prompt
 
             let event =
                 { Id = Guid.NewGuid()
@@ -77,24 +83,31 @@ module EventHandler =
                 |> AnsiConsole.Prompt
 
             let onlyDate =
-                textPrompt<string> { 
+                textPrompt<string> {
                     text "What's the new date? [grey](yyyy-mm-dd)[/]"
-                    validator (fun input -> 
+
+                    validator (fun input ->
                         match OnlyDate.TryParse(input) with
-                        | Some _ -> ValidationResult.Success ()
-                        | None -> ValidationResult.Error "[red]The date inserted is not valid![/]" )
-                    default_value (event.When.ToString()) } 
+                        | Some _ -> ValidationResult.Success()
+                        | None -> ValidationResult.Error "[red]The date inserted is not valid![/]")
+
+                    default_value (event.When.ToString())
+                }
                 |> AnsiConsole.Prompt
                 |> OnlyDate.TryParse
-                |> Option.defaultValue { Year = now.Year; Month = now.Month; Day = now.Day }
+                |> Option.defaultValue
+                    { Year = now.Year
+                      Month = now.Month
+                      Day = now.Day }
 
             let isImportant =
-                textPrompt<bool> { 
-                    text "Is it important? [grey](n/y)[/]" 
+                textPrompt<bool> {
+                    text "Is it important? [grey](n/y)[/]"
                     choices [| true; false |]
                     converter (fun b -> if b then "y" else "n")
                     default_value event.IsImportant
-                } |> AnsiConsole.Prompt
+                }
+                |> AnsiConsole.Prompt
 
             let updatedEvent =
                 { event with

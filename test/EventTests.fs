@@ -70,7 +70,7 @@ let events: Event array =
 
 
 [<Test>]
-let ``ToString should return proper stringify version of the Event`` () =
+let ``ToString should return proper stringify Event`` () =
     let result = Array.map (fun evt -> evt.ToString()) events
 
     Assert.AreEqual(6, result.Length)
@@ -83,30 +83,31 @@ let ``ToString should return proper stringify version of the Event`` () =
     Assert.AreEqual("important next year 1: important next year 1 (2024-06-05)", result[5])
 
 [<Test>]
-let ``update should return updated version of the Event array if Event is found, based on Id, or return the same version`` () =
-    let updatableEvent = 
-      { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
-        Name = "UPDATE"
-        Description = "it's a test 2"
-        CreatedAt = now
-        IsImportant = false
-        When =
-          { Year = now.Year
-            Month = now.Month
-            Day = now.Day }
-        SoftDeleted = false }
-    let notUpdatableEvent = 
-      { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
-        Name = "TRY TO UPDATE"
-        Description = "it's a test 2"
-        CreatedAt = now
-        IsImportant = false
-        When =
-          { Year = now.Year
-            Month = now.Month
-            Day = now.Day }
-        SoftDeleted = false }
-    
+let ``update should return updated Event array if Event is found, based on Id, or return the same version`` () =
+    let updatableEvent =
+        { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
+          Name = "UPDATE"
+          Description = "it's a test 2"
+          CreatedAt = now
+          IsImportant = false
+          When =
+            { Year = now.Year
+              Month = now.Month
+              Day = now.Day }
+          SoftDeleted = false }
+
+    let notUpdatableEvent =
+        { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
+          Name = "TRY TO UPDATE"
+          Description = "it's a test 2"
+          CreatedAt = now
+          IsImportant = false
+          When =
+            { Year = now.Year
+              Month = now.Month
+              Day = now.Day }
+          SoftDeleted = false }
+
     let updatedResult = Event.update updatableEvent events
     let notUpdatedResult = Event.update notUpdatableEvent events
 

@@ -77,8 +77,10 @@ module Views =
         let todos = ToDo.getViewable now data.ToDos
 
         let nextEvents = Event.nextEvents false Constants.maxCount now data.Events
+
         let nextRecurringEvents =
             RecurringEvent.generateNextEvents false Constants.maxCount now data.RecurringEvents
+
         let events =
             [| nextEvents; nextRecurringEvents |]
             |> Array.reduce Array.append
@@ -86,8 +88,10 @@ module Views =
             |> Array.truncate Constants.maxCount
 
         let nextImportantEvents = Event.nextEvents true Constants.maxCount now data.Events
+
         let nextImportantRecurringEvents =
             RecurringEvent.generateNextEvents true Constants.maxCount now data.RecurringEvents
+
         let importantEvents =
             [| nextImportantEvents; nextImportantRecurringEvents |]
             |> Array.reduce Array.append

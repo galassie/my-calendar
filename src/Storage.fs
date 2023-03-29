@@ -26,4 +26,3 @@ module Storage =
             File.WriteAllText(path, str)
         with ex ->
             printfn "%A" (ex.ToString())
-            

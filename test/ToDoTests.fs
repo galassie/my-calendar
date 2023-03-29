@@ -46,7 +46,7 @@ let todos: ToDo array =
 
 
 [<Test>]
-let ``ToString should return proper stringify version of the ToDo`` () =
+let ``ToString should return proper stringify ToDo`` () =
     let result = Array.map (fun td -> td.ToString()) todos
 
     Assert.AreEqual(6, result.Length)
@@ -59,22 +59,23 @@ let ``ToString should return proper stringify version of the ToDo`` () =
     Assert.AreEqual("test 1: test 1", result[5])
 
 [<Test>]
-let ``update should return updated version of the ToDo array if ToDo is found, based on Id, or return the same version`` () =
-    let updatableToDo = 
-      { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
-        Name = "UPDATE"
-        Description = "it's a test 2"
-        CreatedAt = now
-        MarkedDoneAt = None
-        SoftDeleted = false }
-    let notUpdatableToDo = 
-      { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
-        Name = "TRY TO UPDATE"
-        Description = "it's a test 2"
-        CreatedAt = now
-        MarkedDoneAt = None
-        SoftDeleted = false }
-    
+let ``update should return updated ToDo array if ToDo is found, based on Id, or return the same version`` () =
+    let updatableToDo =
+        { Id = Guid.Parse("6a3abf48-9e1b-4ebb-a912-cbd571797ab1")
+          Name = "UPDATE"
+          Description = "it's a test 2"
+          CreatedAt = now
+          MarkedDoneAt = None
+          SoftDeleted = false }
+
+    let notUpdatableToDo =
+        { Id = Guid.Parse("466491f7-cf50-420c-871f-3669d4f8e6ea")
+          Name = "TRY TO UPDATE"
+          Description = "it's a test 2"
+          CreatedAt = now
+          MarkedDoneAt = None
+          SoftDeleted = false }
+
     let updatedResult = ToDo.update updatableToDo todos
     let notUpdatedResult = ToDo.update notUpdatableToDo todos
 
