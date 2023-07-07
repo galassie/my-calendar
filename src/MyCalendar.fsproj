@@ -3,9 +3,9 @@
     <!-- General -->
     <Title>MyCalendar</Title>
     <RootNamespace>MyCalendar</RootNamespace>
-    <Description>Spectre.Console with with F# style.</Description>
+    <Description>Small, local and simple calendar application in your terminal.</Description>
     <!-- Build settings -->
-    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <DebugType>portable</DebugType>
     <OutputType>Exe</OutputType>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
