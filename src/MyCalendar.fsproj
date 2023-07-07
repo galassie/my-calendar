@@ -1,8 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <!-- General -->
+    <Title>MyCalendar</Title>
     <RootNamespace>MyCalendar</RootNamespace>
+    <Description>Spectre.Console with with F# style.</Description>
+    <!-- Build settings -->
+    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+    <DebugType>portable</DebugType>
+    <OutputType>Exe</OutputType>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- NuGet config -->
+    <PackageId>MyCalendar</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Enrico Galassi</Authors>
+    <PackageTags>fsharp;cli;dotnet;console-application;fsharp-console;tool;</PackageTags>
+    <PackageProjectUrl>https://github.com/galassie/my-calendar</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/galassie/my-calendar</RepositoryUrl>
+    
+    <!-- SourceLink settings -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Tool settings -->
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>my-calendar</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain.fs" />
