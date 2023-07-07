@@ -32,7 +32,7 @@
     <!-- Tool settings -->
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>my-calendar</ToolCommandName>
-    <PackageOutputPath>./nupkg</PackageOutputPath>
+    <PackageOutputPath>./deploy</PackageOutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Domain.fs" />
