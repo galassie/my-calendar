@@ -9,6 +9,12 @@ Built using:
 - [FSharp.Json](https://github.com/fsprojects/FSharp.Json)
 - [FsSpectre](https://github.com/galassie/fs-spectre)
 
+## Install
+
+```shell
+dotnet tool install --global MyCalendar --version 0.1.0
+```
+
 ## Commands 
 
 ``` shell
