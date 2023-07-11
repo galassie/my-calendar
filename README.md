@@ -12,7 +12,6 @@ Built using:
 ## Commands 
 
 ``` shell
-
 # Add a ToDo element
 $ my-calendar todo add
 
@@ -29,13 +28,13 @@ $ my-calendar todo undone
 $ my-calendar todo delete
 
 
-# Add a Event element
+# Add an Event element
 $ my-calendar event add
 
-# Edit a Event element
+# Edit an Event element
 $ my-calendar event edit
 
-# Delete a Event element
+# Delete an Event element
 $ my-calendar event delete
 
 
@@ -47,7 +46,6 @@ $ my-calendar recurring-event edit
 
 # Delete a RecurringEvent element
 $ my-calendar recurring-event delete
-
 ```
 ## Contributing
 
