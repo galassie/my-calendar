@@ -26,4 +26,4 @@ module MainHandler =
             let subArgs = subArgs.GetAllResults()
             RecurringEventHandler.handle now data subArgs
 
-        | _ -> markup { text "[red]Too many arguments provided![/]" } |> AnsiConsole.Write
+        | _ -> markup { text "Wrong arguments provided!\nTry `my-calendar --help` for more information.\n" } |> AnsiConsole.Write

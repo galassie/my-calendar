@@ -118,4 +118,4 @@ module ToDoHandler =
 
             Views.mainView now newData |> AnsiConsole.Write
 
-        | _ -> markup { text "[red]Too many sub arguments provided![/]" } |> AnsiConsole.Write
+        | _ -> markup { text "Wrong sub arguments provided!\nTry `my-calendar todo --help` for more information.\n" } |> AnsiConsole.Write
