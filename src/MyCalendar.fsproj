@@ -12,7 +12,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <!-- NuGet config -->
     <PackageId>MyCalendar</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Enrico Galassi</Authors>
     <PackageTags>fsharp;cli;dotnet;console-application;fsharp-console;tool;</PackageTags>
     <PackageProjectUrl>https://github.com/galassie/my-calendar</PackageProjectUrl>
