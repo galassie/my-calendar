@@ -8,7 +8,7 @@ open FSharp.Json
 module Storage =
 
     let retrieve () =
-        let path = Path.Combine(Environment.CurrentDirectory, $"my-calendar-store.json")
+        let path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"my-calendar-store.json")
 
         let data =
             if (File.Exists(path)) then
@@ -20,7 +20,7 @@ module Storage =
 
     let store (data: MyCalendarData) =
         try
-            let path = Path.Combine(Environment.CurrentDirectory, $"my-calendar-store.json")
+            let path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"my-calendar-store.json")
 
             let str = Json.serialize data
             File.WriteAllText(path, str)
