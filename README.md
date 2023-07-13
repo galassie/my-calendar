@@ -15,7 +15,13 @@ Built using:
 dotnet tool install --global MyCalendar --version 0.1.1
 ```
 
-## Commands 
+## Update
+
+```shell
+dotnet tool update -g MyCalendar
+```
+
+## Commands
 
 ``` shell
 # Add a ToDo element
